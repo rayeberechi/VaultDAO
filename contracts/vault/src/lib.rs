@@ -42,11 +42,7 @@ impl VaultDAO {
     /// # Arguments
     /// * `admin` - Initial administrator address who can manage roles and config.
     /// * `config` - Initialization configuration containing signers, threshold, and limits.
-    pub fn initialize(
-        env: Env,
-        admin: Address,
-        config: InitConfig,
-    ) -> Result<(), VaultError> {
+    pub fn initialize(env: Env, admin: Address, config: InitConfig) -> Result<(), VaultError> {
         // Prevent re-initialization
         if storage::is_initialized(&env) {
             return Err(VaultError::AlreadyInitialized);
