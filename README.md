@@ -51,7 +51,7 @@ VaultDAO is designed for scale and security.
 - **Smart Contracts**: Built with Rust/Soroban using a hybrid storage model (Instance, Persistent, Temporary) to optimize for ledger rent.
 - **Frontend**: A premium React dashboard integrated with the Freighter wallet.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for a deep dive into the system design and [STRUCTURE.md](docs/STRUCTURE.md) for folder organization.
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for a deep dive into the system design and [STRUCTURE.md](docs/STRUCTURE.md) for folder organization.
 
 ---
 
@@ -116,7 +116,7 @@ We are actively participating in the **Stellar Community Drips Wave**. We welcom
 
 ## 🛡️ Security & Conduct
 
-- **Security**: Please read our [SECURITY.md](SECURITY.md) for our vulnerability disclosure policy.
+- **Security**: Please read our [SECURITY.md](docs/SECURITY.md) for our vulnerability disclosure policy.
 - **Conduct**: We follow the [Contributor Covenant](CODE_OF_CONDUCT.md).
 
 ## 📄 License

@@ -52,4 +52,4 @@ VaultDAO is organized as a monorepo containing the smart contract, the frontend 
 - **`ARCHITECTURE.md`**: High-level system design and data flow diagrams.
 - **`ROADMAP.md`**: Project milestones and planned feature updates.
 - **`LICENSE`**: AGPL-3.0 License details.
-- **`SECURITY.md`**: Security policy and vulnerability disclosure process.
+
