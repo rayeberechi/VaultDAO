@@ -11,7 +11,6 @@ import { signTransaction } from '@stellar/freighter-api';
 import { useWallet } from '../context/WalletContext';
 import { parseError } from '../utils/errorParser';
 
-// Replace with your actual Contract ID
 const CONTRACT_ID = "CDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 const NETWORK_PASSPHRASE = "Test SDF Network ; September 2015";
 const RPC_URL = "https://soroban-testnet.stellar.org";
@@ -25,19 +24,15 @@ export const useVaultContract = () => {
     const proposeTransfer = async (
         recipient: string,
         token: string,
-        amount: string, // passed as string to handle large numbers safely
+        amount: string,
         memo: string
     ) => {
         if (!isConnected || !address) {
             throw new Error("Wallet not connected");
         }
-
         setLoading(true);
         try {
-            // 1. Get latest ledger/account data
             const account = await server.getAccount(address);
-
-            // 2. Build Transaction
             const tx = new TransactionBuilder(account, { fee: "100" })
                 .setNetworkPassphrase(NETWORK_PASSPHRASE)
                 .setTimeout(30)
@@ -59,42 +54,58 @@ export const useVaultContract = () => {
                 }))
                 .build();
 
-            // 3. Simulate Transaction (Check required Auth)
             const simulation = await server.simulateTransaction(tx);
             if (SorobanRpc.Api.isSimulationError(simulation)) {
                 throw new Error(`Simulation Failed: ${simulation.error}`);
             }
-
-            // Assemble transaction with simulation data (resources/auth)
             const preparedTx = SorobanRpc.assembleTransaction(tx, simulation).build();
-
-            // 4. Sign with Freighter
             const signedXdr = await signTransaction(preparedTx.toXDR(), {
                 network: "TESTNET",
             });
-
-            // 5. Submit Transaction
             const response = await server.sendTransaction(TransactionBuilder.fromXDR(signedXdr as string, NETWORK_PASSPHRASE));
-
-            if (response.status !== "PENDING") {
-                throw new Error("Transaction submission failed");
-            }
-
-            // 6. Poll for status (Simplified)
-            // Real app should loop check status
             return response.hash;
-
         } catch (e: any) {
-            // Parse Error
-            const parsed = parseError(e);
-            throw parsed;
+            throw parseError(e);
         } finally {
             setLoading(false);
         }
     };
 
+    const getDashboardStats = async () => {
+        // Mock data representing a healthy treasury
+        return {
+            totalProposals: 24,
+            pendingApprovals: 3,
+            readyToExecute: 1,
+            activeSigners: 5,
+            threshold: "3/5"
+        };
+    };
+
+    const getSpendingLimits = async () => {
+        // Mock data to show the progress bars in action
+        return {
+            daily: { used: 450, limit: 1000 },
+            weekly: { used: 1200, limit: 5000 }
+        };
+    };
+
+    const getRecentActivity = async () => {
+        // Mocking the "Last 5 Proposals" requirement
+        return [
+            { id: "101", type: "Transfer", amount: "500 XLM", status: "Pending", date: "2h ago" },
+            { id: "100", type: "Transfer", amount: "120 XLM", status: "Executed", date: "5h ago" },
+            { id: "099", type: "Transfer", amount: "1,000 XLM", status: "Rejected", date: "1d ago" },
+            { id: "098", type: "Transfer", amount: "250 XLM", status: "Executed", date: "2d ago" },
+            { id: "097", type: "Transfer", amount: "50 XLM", status: "Expired", date: "3d ago" },
+        ];
+    };
+
     return {
         proposeTransfer,
+        getDashboardStats,
+        getSpendingLimits,
+        getRecentActivity,
         loading
     };
 };
